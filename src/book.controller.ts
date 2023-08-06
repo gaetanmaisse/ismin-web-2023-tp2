@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Post,
   Query,
@@ -36,5 +37,11 @@ export class BookController {
   @Delete(':isbn')
   deleteBook(@Param('isbn') isbn: string): void {
     this.bookService.delete(isbn);
+  }
+
+  @Post('search')
+  @HttpCode(200)
+  searchBooks(@Body('term') term: string): Array<Book> {
+    return this.bookService.search(term);
   }
 }

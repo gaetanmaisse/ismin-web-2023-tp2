@@ -41,4 +41,12 @@ export class BookService {
   delete(isbn: string) {
     this.storage.delete(isbn);
   }
+
+  search(term: string): Array<Book> {
+    return this.getAllBooks()
+      .filter((book) => {
+        return book.title.includes(term) || book.author.includes(term);
+      })
+      .sort(compareWithTitle);
+  }
 }

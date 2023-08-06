@@ -126,4 +126,46 @@ describe('Books API', () => {
 
     expect(response.body).toEqual([]);
   });
+
+  it('/POST books/search', async () => {
+    // First prepare the data by adding some books
+    await httpRequester.post('/books').send({
+      isbn: '978-2081510436',
+      title: 'Candide',
+      author: 'Voltaire',
+      date: '1759',
+    });
+    await httpRequester.post('/books').send({
+      isbn: '978-2081510438',
+      title: 'Zadig',
+      author: 'Voltaire',
+      date: '1748',
+    });
+    await httpRequester.post('/books').send({
+      isbn: '978-2081510437',
+      title: 'La Cantatrice chauve',
+      author: 'Ionesco',
+      date: '1950',
+    });
+
+    // Search for books
+    const response = await httpRequester.post('/books/search').send({
+      term: 'Volt',
+    });
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual([
+      {
+        isbn: '978-2081510436',
+        title: 'Candide',
+        author: 'Voltaire',
+        date: '1759',
+      },
+      {
+        isbn: '978-2081510438',
+        title: 'Zadig',
+        author: 'Voltaire',
+        date: '1748',
+      },
+    ]);
+  });
 });
